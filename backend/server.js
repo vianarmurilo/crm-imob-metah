@@ -7,13 +7,11 @@ const PORT = 3001;
 
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
-// CORS liberado
 app.use(cors());
 app.options('*', cors());
 
 app.use(express.json());
 
-// Rotas da API
 app.use('/api/clientes', require('./routes/clientes'));
 app.use('/api/atividades', require('./routes/atividades'));
 
@@ -29,7 +27,6 @@ app.post('/api/transcrever', upload.single('audio'), (req, res) => {
   res.json({ texto: textos[Math.floor(Math.random() * textos.length)] });
 });
 
-// Frontend estatico (para producao)
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'frontend', 'dist', 'index.html'));
