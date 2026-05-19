@@ -2,18 +2,18 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
-
 const app = express();
 const PORT = 3001;
 
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
-
+// CORS — isso TEM que vir antes de qualquer rota
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use(express.json());
+// ...resto do código
 
 app.use('/api/clientes', require('./routes/clientes'));
 app.use('/api/atividades', require('./routes/atividades'));
