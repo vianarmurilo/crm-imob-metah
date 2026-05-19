@@ -8,7 +8,11 @@ const PORT = 3001;
 
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
-app.use(cors({ origin: '*' }));
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+}));
 app.use(express.json());
 
 app.use('/api/clientes', require('./routes/clientes'));
