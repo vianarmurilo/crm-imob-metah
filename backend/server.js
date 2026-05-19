@@ -7,12 +7,13 @@ const PORT = 3001;
 
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
-// ⚠️ CORS - TEM QUE VIR ANTES DE QUALQUER ROTA
+// CORS liberado
 app.use(cors());
 app.options('*', cors());
 
 app.use(express.json());
 
+// Rotas da API
 app.use('/api/clientes', require('./routes/clientes'));
 app.use('/api/atividades', require('./routes/atividades'));
 
@@ -25,10 +26,13 @@ app.post('/api/transcrever', upload.single('audio'), (req, res) => {
     "Cliente Ana Costa, etapa fechamento, origem Portal",
     "Cliente Pedro Almeida, etapa contato, origem Redes Sociais"
   ];
-  res.json({ texto: textos[Math.floor(Math.random()*textos.length)] });
+  res.json({ texto: textos[Math.floor(Math.random() * textos.length)] });
 });
 
+// Frontend estatico (para producao)
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, '..', 'frontend', 'dist', 'index.html')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'dist', 'index.html'));
+});
 
 app.listen(PORT, () => console.log('Servidor rodando em http://localhost:' + PORT));
