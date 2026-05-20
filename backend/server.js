@@ -3,14 +3,21 @@ const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
+const allowedOrigins = (process.env.CORS_ORIGIN || '').split(',').map(origin => origin.trim()).filter(Boolean);
 
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
-app.use(cors());
+app.use(cors({
+  origin: allowedOrigins.length ? allowedOrigins : true,
+}));
 app.options('*', cors());
 
 app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.json({ ok: true, service: 'crm-imob-metah-backend' });
+});
 
 app.use('/api/clientes', require('./routes/clientes'));
 app.use('/api/atividades', require('./routes/atividades'));
@@ -27,9 +34,4 @@ app.post('/api/transcrever', upload.single('audio'), (req, res) => {
   res.json({ texto: textos[Math.floor(Math.random() * textos.length)] });
 });
 
-app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'frontend', 'dist', 'index.html'));
-});
-
-app.listen(PORT, () => console.log('Servidor rodando em http://localhost:' + PORT));
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));

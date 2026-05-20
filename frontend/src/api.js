@@ -1,4 +1,4 @@
-const API = "https://crm-imob-metah-api.onrender.com/api";
+const API = import.meta.env.VITE_API_URL || "https://crm-imob-metah.onrender.com/api";
 
 export async function getClientes(etapa = null) {
   const url = etapa ? `${API}/clientes?etapa=${etapa}` : `${API}/clientes`;
